@@ -1,5 +1,6 @@
 package com.example.CityNewsBase.api.worldNewsApiProvider;
 
+import com.example.CityNewsBase.config.SecretsManagerService;
 import com.example.CityNewsBase.model.worldNewsModel.WorldNews;
 import com.example.CityNewsBase.model.worldNewsModel.WorldNewsResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,7 @@ public class WorldNewsApiProvider {
     }
 
 
-    @Value("${APIKEY}")
-    String API_KEY;
+   private final String API_KEY = SecretsManagerService.getSecretValue("APIKEY");
 
 
     public List<WorldNews> getNews(String earliestPublishDate, int offset) {

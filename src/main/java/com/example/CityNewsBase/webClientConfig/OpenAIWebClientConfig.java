@@ -1,5 +1,6 @@
 package com.example.CityNewsBase.webClientConfig;
 
+import com.example.CityNewsBase.config.SecretsManagerService;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +16,10 @@ public class OpenAIWebClientConfig {
     private static final Logger logger = LoggerFactory.getLogger(OpenAIWebClientConfig.class);
 
     @Bean
-    public WebClient openAiWebClient(WebClient.Builder webClientBuilder,
-                                     @Value("${OpenAIAPIKey}") String openAiApiKey) {
+    public WebClient openAiWebClient(WebClient.Builder webClientBuilder) {
         return webClientBuilder
                 .baseUrl("https://api.openai.com/v1/chat/completions")
-                .defaultHeader("Authorization", "Bearer " + openAiApiKey)
+                .defaultHeader("Authorization", "Bearer " + SecretsManagerService.getSecretValue("OpenAIAPIKey"))
                 .defaultHeader("Content-Type", "application/json")
                 .filter(logRequest())
                 .filter(logResponse())

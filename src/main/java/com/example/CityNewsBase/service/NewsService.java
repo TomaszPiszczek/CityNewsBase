@@ -47,7 +47,7 @@ public class NewsService {
     public  void get20NewsWithLocationWithCurrentDay() {
         String earliestPublishDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         int offset = 0;
-        for (int newsFetched = 0; newsFetched < 8; newsFetched++) {
+        for (int newsFetched = 0; newsFetched < 1; newsFetched++) {
             offset+=10;
             List<News> news = getNewsWithLocation(earliestPublishDate, offset);
             databaseService.saveNews(news);
