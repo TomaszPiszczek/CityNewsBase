@@ -28,8 +28,7 @@ public class NewsController {
     }
     @GetMapping("/askChat")
     public void newsa(){
-     newsAnalyzer.get20NewsWithLocationWithCurrentDay();
+     newsAnalyzer.getNewsWithLocation("2024-11-7",1);
     }
 
- 
 }
