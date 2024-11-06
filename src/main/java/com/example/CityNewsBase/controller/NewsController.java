@@ -31,10 +31,5 @@ public class NewsController {
      newsAnalyzer.get20NewsWithLocationWithCurrentDay();
     }
 
-    @GetMapping("/ask")
-    public String news(){
-     
-
-        return SecretsManagerService.getSecret();
-    }
+ 
 }
