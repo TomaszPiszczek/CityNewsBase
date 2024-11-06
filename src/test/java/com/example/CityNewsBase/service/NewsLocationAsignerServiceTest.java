@@ -19,7 +19,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-class NewsLocationAssignerServiceTest {
+class NewsLocationAsignerServiceTest {
 
     @Mock
     private CityRepository cityRepository;
