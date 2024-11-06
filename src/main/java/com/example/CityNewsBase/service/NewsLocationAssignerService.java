@@ -51,12 +51,6 @@ public class NewsLocationAssignerService {
 
 
         }
-        for (News news:newsWithLocationList
-             ) {
-            if(news.getCities() !=null){
-                news.getCities().forEach(city -> System.out.println("after assign" + city.getCityName()));
-            }
-        }
 
         return newsWithLocationList;
     }
@@ -84,7 +78,6 @@ public class NewsLocationAssignerService {
         classification.getCityNames().forEach(cityName -> classification.getStateNames().forEach(stateName -> cityRepository.findByNameAndStateIgnoreCase(cityName, stateName).ifPresent(cities::add)));
 
        news.setCities(cities);
-        newsRepository.save(news);
 
     }
 }
