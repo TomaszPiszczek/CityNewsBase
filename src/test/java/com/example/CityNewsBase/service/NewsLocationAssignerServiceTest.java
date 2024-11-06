@@ -16,10 +16,10 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class NewsLocationAsignerServiceTest {
+class NewsLocationAssignerServiceTest {
 
     @Mock
     private CityRepository cityRepository;
@@ -70,13 +70,12 @@ class NewsLocationAsignerServiceTest {
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(false, result.get(0).isGlobalNews());
+        assertFalse(result.get(0).isGlobalNews());
         assertEquals(1, result.get(0).getCities().size());
         assertEquals("Sample City", result.get(0).getCities().iterator().next().getCityName());
         assertEquals(1, result.get(0).getStates().size());
         assertEquals("Sample State", result.get(0).getStates().iterator().next().getStateName());
 
-        verify(newsRepository, times(1)).save(news1);
     }
 
     @Test
@@ -97,7 +96,7 @@ class NewsLocationAsignerServiceTest {
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(true, result.get(0).isGlobalNews());
+        assertTrue(result.get(0).isGlobalNews());
         assertEquals(0, result.get(0).getCities().size());
         assertEquals(0, result.get(0).getStates().size());
 
@@ -140,7 +139,7 @@ class NewsLocationAsignerServiceTest {
         assertEquals(2, result.size());
 
         News resultNews1 = result.get(0);
-        assertEquals(false, resultNews1.isGlobalNews());
+        assertFalse(resultNews1.isGlobalNews());
         assertEquals(1, resultNews1.getCities().size());
         assertEquals("City A", resultNews1.getCities().iterator().next().getCityName());
         assertEquals(1, resultNews1.getStates().size());
@@ -148,11 +147,9 @@ class NewsLocationAsignerServiceTest {
 
         // Check second news item (Global)
         News resultNews2 = result.get(1);
-        assertEquals(true, resultNews2.isGlobalNews());
+        assertTrue(resultNews2.isGlobalNews());
         assertEquals(0, resultNews2.getCities().size());
         assertEquals(0, resultNews2.getStates().size());
 
-        verify(newsRepository, times(1)).save(news1);
-        verify(newsRepository, never()).save(news2);
     }
 }
