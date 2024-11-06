@@ -40,7 +40,7 @@ public class News {
     @NotNull(message = "Author cannot be null")
     private String author;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "news_city",
             joinColumns = @JoinColumn(name = "news_id"),
@@ -48,7 +48,7 @@ public class News {
     )
     private Set<City> cities = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "news_state",
             joinColumns = @JoinColumn(name = "news_id"),

@@ -16,10 +16,9 @@ public class OpenAIWebClientConfig {
 
     @Bean
     public WebClient openAiWebClient(WebClient.Builder webClientBuilder,
-                                     @Value("${OpenAIAPIURL}") String openAiBaseUrl,
                                      @Value("${OpenAIAPIKey}") String openAiApiKey) {
         return webClientBuilder
-                .baseUrl(openAiBaseUrl)
+                .baseUrl("https://api.openai.com/v1/chat/completions")
                 .defaultHeader("Authorization", "Bearer " + openAiApiKey)
                 .defaultHeader("Content-Type", "application/json")
                 .filter(logRequest())

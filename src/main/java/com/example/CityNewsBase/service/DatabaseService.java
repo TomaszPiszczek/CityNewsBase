@@ -38,12 +38,10 @@ public class DatabaseService {
         }
     }
 
-    // Method to fetch all existing titles from the database
     private List<String> fetchExistingTitles() {
         return newsRepository.findAllTitles();
     }
 
-    // Method to check if the title is unique
     private boolean isTitleUnique(String title, List<String> existingTitles) {
         boolean isUnique = !existingTitles.contains(title);
         if (!isUnique) {

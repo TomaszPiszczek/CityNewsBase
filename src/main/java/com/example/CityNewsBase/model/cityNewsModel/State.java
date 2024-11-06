@@ -22,6 +22,6 @@ public class State {
     @NotNull(message = "Author cannot be null")
     private String stateName;
 
-    @ManyToMany(mappedBy = "states")
+    @ManyToMany(mappedBy = "states",cascade = CascadeType.MERGE)
     private Set<News> news = new HashSet<>();
 }

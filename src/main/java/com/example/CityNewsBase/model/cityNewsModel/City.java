@@ -22,10 +22,10 @@ public class City {
     @NotNull(message = "Author cannot be null")
     private String cityName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
-    @ManyToMany(mappedBy = "cities")
+    @ManyToMany(mappedBy = "cities",cascade = CascadeType.MERGE)
     private Set<News> news = new HashSet<>();
 }

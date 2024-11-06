@@ -44,4 +44,12 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionResponse> handleNullPointerException(NullPointerException ex) {
+        ExceptionResponse response = new ExceptionResponse("Null Pointer Exception",
+                "A required object was null. Please check your input data or method calls.");
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

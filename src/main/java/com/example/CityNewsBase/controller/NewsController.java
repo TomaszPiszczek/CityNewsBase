@@ -1,11 +1,12 @@
 package com.example.CityNewsBase.controller;
 
-import com.example.CityNewsBase.model.cityNewsModel.News;
+import com.example.CityNewsBase.config.SecretsManagerService;
 import com.example.CityNewsBase.service.NewsService;
 import com.example.CityNewsBase.temp.CityService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,14 @@ public class NewsController {
         return ResponseEntity.ok("Cities added successfully");
     }
     @GetMapping("/askChat")
-    public ResponseEntity<List<News>> newsa(){
-     return ResponseEntity.ok(newsAnalyzer.getNewsWithLocation("2024-11-05",1));
+    public void newsa(){
+     newsAnalyzer.get20NewsWithLocationWithCurrentDay();
+    }
+
+    @GetMapping("/ask")
+    public String news(){
+     
+
+        return SecretsManagerService.getSecret();
     }
 }
