@@ -1,5 +1,6 @@
 package com.example.CityNewsBase.model.cityNewsModel;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class State {
     private UUID id;
 
     @Column(name = "state_name", nullable = false)
+    @NotNull(message = "Author cannot be null")
     private String stateName;
 
     @ManyToMany(mappedBy = "states")

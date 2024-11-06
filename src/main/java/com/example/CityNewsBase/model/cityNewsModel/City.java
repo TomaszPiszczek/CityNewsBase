@@ -1,6 +1,7 @@
 package com.example.CityNewsBase.model.cityNewsModel;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class City {
     private UUID id;
 
     @Column(name = "city_name", nullable = false)
+    @NotNull(message = "Author cannot be null")
     private String cityName;
 
     @ManyToOne
