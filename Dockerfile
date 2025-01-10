@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY app.jar app.jar
+COPY CityNewsBase-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8081
 
