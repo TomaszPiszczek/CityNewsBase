@@ -27,10 +27,25 @@ public class NewsService {
     }
 
 
-    @Scheduled(cron = "0 0 5 * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void fetchNewsAt5AM() {
         get20NewsWithLocationWithCurrentDay();
     }
+    @Scheduled(cron = "0 0 2 * * *")
+    public void fetchNewsAt1AM() {
+        get20NewsWithLocationWithCurrentDay();
+    }
+    @Scheduled(cron = "0 0 3 * * *")
+    public void fetchNewsAt3AM() {
+        get20NewsWithLocationWithCurrentDay();
+    }
+    @Scheduled(cron = "0 0 4 * * *")
+    public void fetchNewsAt4AM() {
+        get20NewsWithLocationWithCurrentDay();
+    }
+
+
+
 
 
     @Scheduled(cron = "0 59 23 * * *")
