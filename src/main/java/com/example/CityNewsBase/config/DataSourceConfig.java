@@ -16,7 +16,7 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
-                .url("jdbc:postgresql://localhost/CityNews")
+                .url("jdbc:postgresql://postgres-container:5432/CityNews")
                 .username("postgres")
                 .password(dbPassword)
                 .driverClassName("org.postgresql.Driver")
