@@ -28,6 +28,11 @@ jobs:
       - name: Debug workspace
         run: ls -R
 
+      - name: Verify files before SCP
+        run: |
+          ls -lh Dockerfile
+          ls -lh target/CityNewsBase-0.0.1-SNAPSHOT.jar
+
       - name: Push application files to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -35,8 +40,8 @@ jobs:
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
           source: |
-            ./Dockerfile
-            ./target/CityNewsBase-0.0.1-SNAPSHOT.jar
+            Dockerfile
+            target/CityNewsBase-0.0.1-SNAPSHOT.jar
           target: ~/app/
           debug: true
 
