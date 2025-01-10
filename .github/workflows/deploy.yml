@@ -10,57 +10,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Sprawdzenie kodu z repozytorium
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Debugowanie pierwszego kroku
       - name: Print test1
         run: echo "test1"
 
+      # Ustawienie środowiska JDK
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
+      # Budowanie aplikacji z użyciem Mavena
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Debug workspace
-        run: ls -R
-
+      # Weryfikacja obecności plików
       - name: Verify files before SCP
         run: |
-          ls -lh Dockerfile
           ls -lh target/CityNewsBase-0.0.1-SNAPSHOT.jar
+          ls -lh Dockerfile
 
+      # Wysyłanie plików na EC2
       - name: Push application files to EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: 51.20.58.13
+          host: 51.20.68.13
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
           script: |
             mkdir -p ~/app/
-            scp Dockerfile ec2-user@51.20.58.13:~/app/
-            scp target/CityNewsBase-0.0.1-SNAPSHOT.jar ec2-user@51.20.58.13:~/app/
+            scp -i ~/.ssh/id_rsa target/CityNewsBase-0.0.1-SNAPSHOT.jar ec2-user@51.20.68.13:~/app/
+            scp -i ~/.ssh/id_rsa Dockerfile ec2-user@51.20.68.13:~/app/
 
+      # Uruchamianie aplikacji na Dockerze
       - name: Run Docker container on EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: 51.20.58.13
+          host: 51.20.68.13
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
           script: |
-            cd ~/app
+            cd ~/app/
             docker stop spring-boot-container || true
             docker rm spring-boot-container || true
             docker build -t my-spring-boot-app .
-            docker run -d --name spring-boot-container my-spring-boot-app
+            docker run -d -p 80:8080 --name spring-boot-container my-spring-boot-app
 
+      # Testowanie statusu kontenera
       - name: Test container status on EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: 51.20.58.13
+          host: 51.20.68.13
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
           script: |
