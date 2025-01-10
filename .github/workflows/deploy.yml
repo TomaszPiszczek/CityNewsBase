@@ -34,16 +34,15 @@ jobs:
           ls -lh target/CityNewsBase-0.0.1-SNAPSHOT.jar
 
       - name: Push application files to EC2
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: 51.20.58.13
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
-          source: |
-            Dockerfile
-            target/CityNewsBase-0.0.1-SNAPSHOT.jar
-          target: ~/app/
-          debug: true
+          script: |
+            mkdir -p ~/app/
+            scp Dockerfile ec2-user@51.20.58.13:~/app/
+            scp target/CityNewsBase-0.0.1-SNAPSHOT.jar ec2-user@51.20.58.13:~/app/
 
       - name: Run Docker container on EC2
         uses: appleboy/ssh-action@v0.1.4
