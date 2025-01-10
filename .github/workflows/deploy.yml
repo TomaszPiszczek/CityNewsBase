@@ -41,9 +41,9 @@ jobs:
           echo "Length of key:"
           echo "${{ secrets.AWS_PEM }}" | wc -c
           echo "First 10 characters of key:"
-          echo "${{ secrets.AWS_PEM }}" | head -c 10
+          echo "${{ secrets.AWS_PEM }}" | head -c 20
           echo "Last 10 characters of key:"
-          echo "${{ secrets.AWS_PEM }}" | tail -c 10
+          echo "${{ secrets.AWS_PEM }}" | tail -c 20
 
       # Debugowanie połączenia SSH (ręczne użycie klucza)
       - name: Debug SSH connection
