@@ -35,51 +35,44 @@ jobs:
           ls -lh target/CityNewsBase-0.0.1-SNAPSHOT.jar
           ls -lh Dockerfile
 
-      # Debugowanie połączenia SSH
+      # Debugowanie klucza PEM (bezpieczne wyświetlenie informacji)
+      - name: Debug PEM key
+        run: |
+          echo "Length of key:"
+          echo "${{ secrets.AWS_PEM }}" | wc -c
+          echo "First 10 characters of key:"
+          echo "${{ secrets.AWS_PEM }}" | head -c 10
+          echo "Last 10 characters of key:"
+          echo "${{ secrets.AWS_PEM }}" | tail -c 10
+
+      # Debugowanie połączenia SSH (ręczne użycie klucza)
       - name: Debug SSH connection
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: 51.20.68.13
-          username: ec2-user
-          key: ${{ secrets.AWS_PEM }}
-          script: |
-            echo "SSH connection successful"
+        run: |
+          echo "${{ secrets.AWS_PEM }}" > key.pem
+          chmod 600 key.pem
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 "echo 'SSH connection successful'"
 
       # Wysyłanie plików na EC2
       - name: Push application files to EC2
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: 51.20.68.13
-          username: ec2-user
-          key: ${{ secrets.AWS_PEM }}
-          script: |
-            mkdir -p ~/app/
-            echo "${{ secrets.AWS_PEM }}" > ~/key.pem
-            chmod 600 ~/key.pem
-            scp -i ~/key.pem target/CityNewsBase-0.0.1-SNAPSHOT.jar ec2-user@51.20.68.13:~/app/
-            scp -i ~/key.pem Dockerfile ec2-user@51.20.68.13:~/app/
+        run: |
+          scp -i key.pem -o StrictHostKeyChecking=no target/CityNewsBase-0.0.1-SNAPSHOT.jar ec2-user@51.20.68.13:~/app/
+          scp -i key.pem -o StrictHostKeyChecking=no Dockerfile ec2-user@51.20.68.13:~/app/
 
       # Uruchamianie aplikacji na Dockerze
       - name: Run Docker container on EC2
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: 51.20.68.13
-          username: ec2-user
-          key: ${{ secrets.AWS_PEM }}
-          script: |
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             cd ~/app/
             docker stop spring-boot-container || true
             docker rm spring-boot-container || true
             docker build -t my-spring-boot-app .
             docker run -d -p 80:8080 --name spring-boot-container my-spring-boot-app
+          EOF
 
       # Testowanie statusu kontenera
       - name: Test container status on EC2
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: 51.20.68.13
-          username: ec2-user
-          key: ${{ secrets.AWS_PEM }}
-          script: |
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             docker ps | grep spring-boot-container || exit 1
             docker logs spring-boot-container
+          EOF
