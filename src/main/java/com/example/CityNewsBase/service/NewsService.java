@@ -33,7 +33,7 @@ public class NewsService {
     }
 
 
-    @Scheduled(cron = "0 0 17 * * *")
+    @Scheduled(cron = "0 59 23 * * *")
     public void fetchNewsAt5PM() {
         get20NewsWithLocationWithCurrentDay();
 
