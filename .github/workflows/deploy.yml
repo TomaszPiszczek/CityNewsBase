@@ -37,9 +37,12 @@ jobs:
           ls -lh target/*.jar
           ls -lh Dockerfile
 
-      # Wysyłanie plików na EC2
+      # Tworzenie katalogu i wysyłanie plików na EC2
       - name: Push application files to EC2
         run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
+            mkdir -p ~/app2/
+          EOF
           scp -i key.pem -o StrictHostKeyChecking=no target/*.jar ec2-user@51.20.68.13:~/app2/
           scp -i key.pem -o StrictHostKeyChecking=no Dockerfile ec2-user@51.20.68.13:~/app2/
 
