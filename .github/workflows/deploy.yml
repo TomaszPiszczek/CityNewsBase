@@ -38,9 +38,10 @@ jobs:
           ls -lh Dockerfile
 
       # Tworzenie katalogu i wysyłanie plików na EC2
-      - name: Push application files to EC2
+      - name: Ensure target directory exists on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
+            if [ -f ~/app2 ]; then rm ~/app2; fi
             mkdir -p ~/app2/
           EOF
           scp -i key.pem -o StrictHostKeyChecking=no target/*.jar ec2-user@51.20.68.13:~/app2/
