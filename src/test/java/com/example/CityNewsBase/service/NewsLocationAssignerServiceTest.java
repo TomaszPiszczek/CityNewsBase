@@ -23,7 +23,6 @@ class NewsLocationAssignerServiceTest {
 
     @Mock
     private CityRepository cityRepository;
-
     @Mock
     private StateRepository stateRepository;
 
