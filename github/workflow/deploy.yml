@@ -1,9 +1,9 @@
-name: Deploy to EC2
+name: Deploy to EC2 with Docker
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
@@ -22,21 +22,27 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Upload JAR to EC2
+      - name: Build Docker image
+        run: docker build -t my-spring-boot-app .
+
+      - name: Push Docker image to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
           host: 13.48.79.235
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
-          source: target/*.jar
+          source: Dockerfile
           target: ~/app/
 
-      - name: Start application on EC2
+      - name: Run Docker container on EC2
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: 13.48.79.235
+          host: 51.20.68.13
           username: ec2-user
           key: ${{ secrets.AWS_PEM }}
           script: |
-            pkill -f 'java -jar' || true
-            nohup java -jar ~/app/*.jar > ~/app/app.log 2>&1 &
+            cd ~/app
+            docker stop spring-boot-container || true
+            docker rm spring-boot-container || true
+            docker build -t my-spring-boot-app .
+            docker run -d --name spring-boot-container my-spring-boot-app
