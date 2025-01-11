@@ -44,6 +44,9 @@ jobs:
               docker rm \$CONTAINER_ID
             fi
           EOF
+      #Uruchomienie testów
+      - name: Run unit tests
+        run: mvn test
 
       # Budowanie aplikacji z Maven
       - name: Build with Maven
