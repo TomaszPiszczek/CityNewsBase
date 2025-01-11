@@ -1,5 +1,6 @@
 package com.example.CityNewsBase;
 
+import com.example.CityNewsBase.model.cityNewsModel.News;
 import com.example.CityNewsBase.service.NewsService;
 import com.example.CityNewsBase.temp.CityService;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,8 @@ public class NewsController {
         return ResponseEntity.ok("Cities added successfully");
     }
     @GetMapping("/askChat")
-    public void newsa(){
-        newsAnalyzer.getNewsWithLocation("2025-01-10",1);
+    public ResponseEntity<List<News>> newsa(){
+
+        return ResponseEntity.ok( newsAnalyzer.getNewsWithLocation("2025-01-10",1));
     }
 }

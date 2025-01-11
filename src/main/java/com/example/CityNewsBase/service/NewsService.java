@@ -74,6 +74,7 @@ public class NewsService {
         List<WorldNews> newsFromApi = worldNewsApiProvider.getNews(earliestPublishDate, offset);
         List<News> news = NewsMapper.mapToNews(newsFromApi);
         news = newsLocationAssignerService.assignLocationsToNews(news);
+        databaseService.saveNews(news);
         return news;
     }
 
