@@ -24,8 +24,10 @@ public class NewsController {
         return ResponseEntity.ok("Cities added successfully");
     }
     @GetMapping("/askChat")
-    public ResponseEntity<List<News>> newsa(){
+    public ResponseEntity<List<News>> newsa(
+            @RequestParam("date") String date,
+            @RequestParam("offset") int offset) {
 
-        return ResponseEntity.ok( newsAnalyzer.getNewsWithLocation("2025-01-10",1));
+        return ResponseEntity.ok(newsAnalyzer.getNewsWithLocation(date, offset));
     }
 }
