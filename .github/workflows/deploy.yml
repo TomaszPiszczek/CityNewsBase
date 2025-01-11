@@ -10,31 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Sprawdzenie kodu z repozytorium
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Walidacja klucza PEM
       - name: Validate PEM key
         run: |
           echo "${{ secrets.AWS_PEM }}" > key.pem
           chmod 600 key.pem
 
-      # Upewnienie się, że sieć Dockera istnieje na EC2
       - name: Ensure Docker network exists on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             docker network inspect my-network >/dev/null 2>&1 || docker network create my-network
           EOF
 
-      # Tworzenie katalogu docelowego na EC2
       - name: Ensure app2 directory exists on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             mkdir -p ~/app2
           EOF
 
-      # Usuwanie istniejących kontenerów na porcie 8081
       - name: Remove existing containers on port 8081
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
@@ -44,34 +39,29 @@ jobs:
               docker rm \$CONTAINER_ID
             fi
           EOF
-      #Uruchomienie testów
+
       - name: Run unit tests
         run: mvn test
 
-      # Budowanie aplikacji z Maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # Weryfikacja plików wynikowych
       - name: Verify build outputs
         run: |
           ls -lh target/*.jar
           ls -lh Dockerfile
 
-      # Wysyłanie plików na EC2
       - name: Push application files to EC2
         run: |
           scp -i key.pem -o StrictHostKeyChecking=no target/*.jar ec2-user@51.20.68.13:~/app2/
           scp -i key.pem -o StrictHostKeyChecking=no Dockerfile ec2-user@51.20.68.13:~/app2/
 
-      # Weryfikacja zawartości katalogu na EC2
       - name: List files in ~/app2 on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             ls -lh ~/app2
           EOF
 
-      # Zmiana nazwy pliku JAR na app.jar na EC2
       - name: Rename JAR file on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
@@ -84,7 +74,6 @@ jobs:
             fi
           EOF
 
-      # Uruchamianie kontenera Dockera na EC2
       - name: Run Docker container on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
@@ -93,7 +82,6 @@ jobs:
             docker run -d --network my-network -p 8081:8081 --name spring-boot-container-2 my-spring-boot-app-2
           EOF
 
-      # Testowanie statusu kontenera
       - name: Test container status on EC2
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
