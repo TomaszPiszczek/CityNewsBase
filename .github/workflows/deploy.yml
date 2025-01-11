@@ -34,6 +34,17 @@ jobs:
             mkdir -p ~/app2
           EOF
 
+      # Usuwanie istniejących kontenerów na porcie 8081
+      - name: Remove existing containers on port 8081
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
+            CONTAINER_ID=\$(docker ps -q --filter "publish=8081")
+            if [ -n "\$CONTAINER_ID" ]; then
+              docker stop \$CONTAINER_ID
+              docker rm \$CONTAINER_ID
+            fi
+          EOF
+
       # Budowanie aplikacji z Maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
@@ -75,8 +86,6 @@ jobs:
         run: |
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@51.20.68.13 << EOF
             cd ~/app2/
-            docker stop spring-boot-container-2 || true
-            docker rm spring-boot-container-2 || true
             docker build -t my-spring-boot-app-2 .
             docker run -d --network my-network -p 8081:8081 --name spring-boot-container-2 my-spring-boot-app-2
           EOF

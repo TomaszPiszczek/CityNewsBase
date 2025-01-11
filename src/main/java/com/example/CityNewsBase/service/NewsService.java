@@ -31,11 +31,11 @@ public class NewsService {
     public void fetchNewsAt5AM() {
         get20NewsWithLocationWithCurrentDay();
     }
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "0 05 1 * * *")
     public void fetchNewsAt1AM() {
         get20NewsWithLocationWithCurrentDay();
     }
-    @Scheduled(cron = "0 0 3 * * *")
+    @Scheduled(cron = "0 06 1 * * *")
     public void fetchNewsAt3AM() {
         get20NewsWithLocationWithCurrentDay();
     }
