@@ -24,7 +24,6 @@ public class CityService {
             String stateName = entry.getKey();
             List<String> cities = entry.getValue();
 
-            // Sprawdź, czy stan już istnieje, jeśli nie, dodaj nowy
             State state = stateRepository.findByStateName(stateName);
             if (state == null) {
                 state = new State();

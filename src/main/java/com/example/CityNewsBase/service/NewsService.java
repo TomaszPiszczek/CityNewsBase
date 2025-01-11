@@ -27,15 +27,15 @@ public class NewsService {
     }
 
 
-    @Scheduled(cron = "0 07 1 * * *")
+    @Scheduled(cron = "0 30 1 * * *")
     public void fetchNewsAt5AM() {
         get20NewsWithLocationWithCurrentDay();
     }
-    @Scheduled(cron = "0 08 1 * * *")
+    @Scheduled(cron = "0 32 1 * * *")
     public void fetchNewsAt1AM() {
         get20NewsWithLocationWithCurrentDay();
     }
-    @Scheduled(cron = "0 09 1 * * *")
+    @Scheduled(cron = "0 33 1 * * *")
     public void fetchNewsAt3AM() {
         get20NewsWithLocationWithCurrentDay();
     }
